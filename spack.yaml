@@ -1,0 +1,47 @@
+spack:
+  view: false
+  concretizer:
+    reuse: false
+    unify: false
+  packages:
+    gcc:
+      externals:
+      - spec: gcc@13.3.0 languages:='c,c++,fortran'
+        prefix: /usr
+        extra_attributes:
+          compilers:
+            c: /usr/bin/gcc
+            cxx: /usr/bin/g++
+            fortran: /usr/bin/gfortran
+    all:
+      require:
+      - target=x86_64_v3
+    c:
+      require: [gcc@13.3.0]
+    cxx:
+      require: [gcc@13.3.0]
+    fortran:
+      require: [gcc@13.3.0]
+    cuda:
+      buildable: false
+      externals:
+      - spec: cuda@12.9.1
+        prefix: /usr/local/cuda-12.9
+    python:
+      prefer:
+      - '@3.12.12'
+      externals:
+      - spec: python@3.12.12+bz2+crypt+ctypes+dbm+lzma+pyexpat+pythoncmd+readline+sqlite3+ssl~tkinter+uuid+zlib
+        prefix: /opt/python/pkgs/python-3.12.12
+    mpi:
+      require: mpich
+    mpich:
+      buildable: false
+      externals:
+      - spec: mpich@4.3.2~hwloc+hydra+libxml2+romio~verbs~wrapperrpath device=ch4 netmod=ofi
+        prefix: /opt/mpi/pkgs/mpich-4.3.2
+  specs:
+  - nccl@git.49839dfde34086ee9aaf9a1c69ae3404f13773e7 +cuda cuda_arch=80 fabrics=auto
+  - nccl@git.49839dfde34086ee9aaf9a1c69ae3404f13773e7 +cuda cuda_arch=80 fabrics=verbs
+  - nccl +cuda cuda_arch=80 fabrics=auto
+  - nccl +cuda cuda_arch=80 fabrics=verbs
